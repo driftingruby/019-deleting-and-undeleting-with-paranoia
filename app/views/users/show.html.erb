@@ -1,19 +1,64 @@
 <legend>Editing <%= @user.full_name %></legend>
+<div class='row'>
+  <div class='col-xs-4'>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">User</h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          <strong>First name:</strong>
+          <%= @user.first_name %>
+        </p>
 
-<p>
-  <strong>First name:</strong>
-  <%= @user.first_name %>
-</p>
+        <p>
+          <strong>Last name:</strong>
+          <%= @user.last_name %>
+        </p>
 
-<p>
-  <strong>Last name:</strong>
-  <%= @user.last_name %>
-</p>
+        <p>
+          <strong>Email:</strong>
+          <%= @user.email %>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class='col-xs-8'>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Comments</h3>
+      </div>
+      <ul class='list-group'>
+        <% @user.comments.each do |comment| %>
+          <li class='list-group-item'>
+            <%= comment.content %>
+            <span class='pull-right'>
+              <%= link_to 'delete', user_comment_path(@user, comment, type: :normal), method: :delete, class: 'badge' %>
+              <em><%= time_ago_in_words comment.created_at %></em>
+          </li>
+        <% end %>
+      </ul>
+    </div>
 
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Deleted Comments</h3>
+      </div>
+      <ul class='list-group'>
+        <% @user.comments.only_deleted.each do |comment| %>
+          <li class='list-group-item'>
+            <%= comment.content %>
+            <span class='pull-right'>
+              <%= link_to 'undelete', user_comment_path(@user, comment, type: :undelete), method: :delete, class: 'badge' %>
+              <%= link_to 'really delete', user_comment_path(@user, comment, type: :forever), method: :delete, class: 'badge' %>
+              <em><%= time_ago_in_words comment.created_at %></em>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'Back', users_path %> |
+<%= link_to 'New Comment', new_user_comment_path(@user) %>

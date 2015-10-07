@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
-  resources :users
+  resources :users do
+    resources :comments
+  end
   root to: 'users#index'
 end
